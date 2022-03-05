@@ -1,5 +1,11 @@
 # Arras.io Private Server Template
 
+# tricky pls help me to copy on the previous arras server called paddle-arras-source-code please
+
+then copy and paste to the poison freeze code, color barrel code, grow and shrink code and others
+
+and then do not copy and paste on my paddle-arras-source-code tanks because they are too shitty only exports.pbullet and exports.icebullet only
+
 ## Quick Start Guide
 
 1. Click the top right where it says **Remix to Edit :microphone:**

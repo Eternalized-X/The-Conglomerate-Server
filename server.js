@@ -4414,6 +4414,23 @@ var gameloop = (() => {
                             n.damageRecieved += damage._me * deathFactor._me;
                         }
                     }
+                    /*  POISON & FREEZE COLLISIONS  */
+          if (n.ContactPoison && my.Poisoned.IsPoisoned == false) {
+            my.Poisoned = n.PoisonEffectiveness;
+            my.Poisoned.IsPoisoned = true;
+          }
+          if (my.ContactPoison && n.Poisoned.IsPoisoned == false) {
+            n.Poisoned = my.PoisonEffectiveness;
+            n.Poisoned.IsPoisoned = true;
+          }
+          if (n.ContactFreeze && my.Frozen.IsFrozen == false) {
+            my.Frozen = n.FreezeEffectiveness;
+            my.Frozen.IsFrozen = true;
+          }
+          if (my.ContactFreeze && n.Frozen.IsFrozen == false) {
+            n.Frozen = my.FreezeEffectiveness;
+            n.Frozen.IsFrozen = true;
+          }
                     /************* DO MOTION ***********/    
                     if (nIsFirmCollide < 0) {
                         nIsFirmCollide *= -0.5;
@@ -4584,6 +4601,67 @@ var gameloop = (() => {
     //roomSpeed = c.gameSpeed * alphaFactor;
     //setTimeout(moveloop, 1000 / roomSpeed / 30 - delta); 
 })();
+//this is the function that actually poisons you, it needs to be separate so it call call itself and repeat a set amount of times
+function applypoison(element) {
+  if (element.Poisoned.IsPoisoned >= 1) {
+    element.blend.amount = 1;
+    element.Poisoned.IsPoisoned -= 1;
+    let numberOfRotations = 1;
+    if (element.Poisoned.ExpDam == 1) {
+      numberOfRotations =
+        (element.Poisoned.Time * 1000) / element.Poisoned.Interval;
+    }
+    if (
+      !element.invuln &&
+      element.health.amount -
+        element.PoisonImmunity *
+          (element.Poisoned.HP / numberOfRotations +
+            (element.health.max * element.Poisoned.HPP) / numberOfRotations) >
+        0
+    ) {
+      element.health.amount -=
+        element.PoisonImmunity *
+        (element.Poisoned.HP / numberOfRotations +
+          (element.health.max * element.Poisoned.HPP) / numberOfRotations);
+      element.shield.amount -=
+        element.PoisonImmunity *
+        (element.Poisoned.SH / numberOfRotations +
+          (element.shield.max * element.Poisoned.SHP) / numberOfRotations);
+    }
+    setTimeout(() => {
+      applypoison(element);
+    }, element.Poisoned.Interval);
+  } else {
+    element.Poisoned.IsPoisoned = false;
+  }
+}
+//this runs for every object, testing to see if it is poisoned or if it should display a color effect
+function poison(element) {
+  if (element.Poisoned.IsPoisoned === true && element.invuln !== true) {
+    element.Poisoned.Time +=
+      (Math.random() < 0.5 ? -1 : 1) *
+      Math.round(Math.random()) *
+      element.Poisoned.AddTime;
+    element.Poisoned.IsPoisoned =
+      (element.Poisoned.Time * 1000) / element.Poisoned.Interval;
+    setTimeout(() => {
+      applypoison(element);
+    }, element.Poisoned.Interval);
+  }
+ } 
+//the freeze alternative to poison, exxcept all we need to do is make sure it stops after a predetermite amount of time
+function freeze(element) {
+  if (element.Frozen.IsFrozen === true && element.invuln !== true) {
+    element.Frozen.Time +=
+      (Math.random() < 0.5 ? -1 : 1) *
+      Math.round(Math.random()) *
+      element.Frozen.AddTime;
+    element.Frozen.IsFrozen = 2; //2 is just a number to show you are already poisoned, so don't redo it
+    setTimeout(() => {
+      element.Frozen.IsFrozen = false;
+    }, element.Frozen.Time * 1000);
+  }
+}
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 var maintainloop = (() => {
     // Place obstacles
@@ -4615,7 +4693,7 @@ var maintainloop = (() => {
     placeRoids();
     // Spawning functions
     let spawnBosses = (() => {
-        let timer = 0;
+        let timer = 8;
         let boss = (() => {
             let i = 0,
                 names = [],
@@ -4663,7 +4741,7 @@ var maintainloop = (() => {
             };
         })();
         return census => {
-            if (timer > 6000 && ran.dice(16000 - timer)) {
+            if (timer > 1500 && ran.dice(1000 - timer)) {
                 util.log('[SPAWN] Preparing to spawn...');
                 timer = 0;
                 let choice = [];
@@ -4677,7 +4755,7 @@ var maintainloop = (() => {
                         break;
                 }
                 boss.prepareToSpawn(...choice);
-                setTimeout(boss.spawn, 3000);
+                setTimeout(boss.spawn, 4);
                 // Set the timeout for the spawn functions
             } else if (!census.miniboss) timer++;
         };
@@ -4695,7 +4773,7 @@ var maintainloop = (() => {
     // The NPC function
     let makenpcs = (() => {
         // Make base protectors if needed.
-            /*let f = (loc, team) => { 
+            let f = (loc, team) => { 
                 let o = new Entity(loc);
                     o.define(Class.baseProtector);
                     o.team = -team;
@@ -4703,7 +4781,7 @@ var maintainloop = (() => {
             };
             for (let i=1; i<5; i++) {
                 room['bas' + i].forEach((loc) => { f(loc, i); }); 
-            }*/
+            }
         // Return the spawning function
         let bots = [];
         return () => {
@@ -4721,29 +4799,38 @@ var maintainloop = (() => {
             // Spawning
             spawnCrasher(census);
             spawnBosses(census);
-            /*/ Bots
-                if (bots.length < c.BOTS) {
-                    let o = new Entity(room.random());
-                    o.color = 17;
-                    o.define(Class.bot);
-                    o.define(Class.basic);
-                    o.name += ran.chooseBotName();
-                    o.refreshBodyAttributes();
-                    o.color = 17;
-                    bots.push(o);
-                }
-                // Remove dead ones
-                bots = bots.filter(e => { return !e.isDead(); });
-                // Slowly upgrade them
-                bots.forEach(o => {
-                    if (o.skill.level < 45) {
-                        o.skill.score += 35;
-                        o.skill.maintain();
-                    }
-                });
-            */
-        };
-    })();
+            if (bots.length < c.BOTS) {
+        let o = new Entity(room.random());
+        o.define(Class.bot);
+        o.define(ran.choose([Class.basic]));
+        o.name += ran.chooseBotName();
+        o.color = ran.choose([
+          /*0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,*/ 12 /*13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55*/,
+        ]);
+        o.refreshBodyAttributes();
+        /*  o.team = ran.chooseBot2Team();
+                    if (o.team === -1) {o.color = 10};
+                    if (o.team === -2) {o.color = 11};
+                    if (o.team === -3) {o.color = 12};
+                    if (o.team === -4) {o.color = 15};*/
+        bots.push(o);
+      }
+          // Remove dead ones
+      bots = bots.filter((e) => {
+        return !e.isDead();
+      });
+      // Slowly upgrade them
+      bots.forEach((o) => {
+        if (o.skill.level < 0) {
+          // if you only have 3 tiers make it 45
+          o.skill.score += 0;
+          o.skill.maintain();
+        }
+        if (o.upgrades.length)
+          o.upgrade(Math.floor(Math.random() * o.upgrades.length));
+      });
+    };
+  })();
     // The big food function
     let makefood = (() => {
         let food = [], foodSpawners = [];
@@ -4958,7 +5045,7 @@ var maintainloop = (() => {
     return () => {
         // Do stuff
         makenpcs();      
-        makefood(); 
+        //makefood(); 
         // Regen health and update the grid
         entities.forEach(instance => {
             if (instance.shield.max) {
@@ -5028,6 +5115,34 @@ let server = http.createServer((req, res) => {
       res.end()
   }
 })
+
+//Arena Closed.
+/*let close = false;
+function spawnClosers() {
+  let spot = room.randomType("roid");
+  let o = new Entity(spot);
+  const type = ran.choose([Class.ac]);
+  o.define(type);
+  o.team = -100;
+}
+function arenaClose() {
+  close = true;
+  let players = sockets.player;
+  util.log("[INFO] Arena Closed.");
+  sockets.broadcast("Arena Closed: No players can join.");
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  if (players.length === 0) {
+    process.exit(0);
+    util.log("[INFO] Arena Successfully Closed.");
+  }
+}*/
 
 let websockets = (() => {
     // Configure the websocketserver

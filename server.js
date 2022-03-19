@@ -2725,9 +2725,14 @@ class Entity {
     // Reset acceleration
     nullVector(this.accel);
     // Apply motion
+    let slowdown = 1;
+    if (this.Frozen.IsFrozen != false) {
+      slowdown = this.Frozen.SlowMulti * this.FreezeImmunity;
+    }
+
     this.stepRemaining = 1;
-    this.x += (this.stepRemaining * this.velocity.x) / roomSpeed;
-    this.y += (this.stepRemaining * this.velocity.y) / roomSpeed;
+    this.x += (this.stepRemaining * this.velocity.x * slowdown) / roomSpeed;
+    this.y += (this.stepRemaining * this.velocity.y * slowdown) / roomSpeed;
   }
 
   friction() {
@@ -3242,12 +3247,10 @@ var http = require("http"),
         let xy3 = x3 * x3 + y3 * y3;
         let x =
           // Numerator
-          (xy1 * (y2 - y3) + xy2 * (y3 - y1) + xy3 * (y1 - y2)) /
-          (2 * denom);
+          (xy1 * (y2 - y3) + xy2 * (y3 - y1) + xy3 * (y1 - y2)) / (2 * denom);
         let y =
           // Numerator
-          (xy1 * (x3 - x2) + xy2 * (x1 - x3) + xy3 * (x2 - x1)) /
-          (2 * denom);
+          (xy1 * (x3 - x2) + xy2 * (x1 - x3) + xy3 * (x2 - x1)) / (2 * denom);
         let r = Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2));
         let r2 = Math.sqrt(Math.pow(x - x2, 2) + Math.pow(y - y2, 2));
         let r3 = Math.sqrt(Math.pow(x - x3, 2) + Math.pow(y - y3, 2));
@@ -5513,6 +5516,8 @@ var gameloop = (() => {
         my.life();
         logs.life.mark();
         // Apply friction.
+        poison(my);
+        freeze(my);
         my.friction();
         my.confinementToTheseEarthlyShackles();
         logs.selfie.set();

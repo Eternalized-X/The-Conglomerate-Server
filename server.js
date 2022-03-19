@@ -1460,11 +1460,11 @@ var bringToLife = (() => {
             my.range -= 1;
         }
         // Invisibility
-        if (my.invisible[1]) {
-          my.alpha = Math.max(0, my.alpha - my.invisible[1])
-          if (!my.velocity.isShorterThan(0.1) || my.damageReceived)
-            my.alpha = Math.min(1, my.alpha + my.invisible[0])
-        }
+    if (my.invisible[1]) {
+		  	    my.alpha = Math.max(0.01, my.alpha - my.invisible[1]);
+		  	    if (!(my.velocity.x * my.velocity.x + my.velocity.y * my.velocity.y < 0.15 * 0.15) || my.damageRecieved)
+		  	      	my.alpha = Math.min(1, my.alpha + my.invisible[0]);
+		    } else my.alpha = 1;
         // So we start with my master's thoughts and then we filter them down through our control stack
         my.controllers.forEach(AI => {
             let a = AI.think(b);
@@ -1580,6 +1580,25 @@ class Entity {
             fire: false,
             power: 0,
         };
+        //poison and freeze definers
+    this.ContactPoison = false;
+    this.ContactFreeze = false;
+    this.PoisonEffectiveness = {
+      HP: 5,
+      HPP: 0,
+      SH: 5,
+      SHP: 0,
+      Time: 3,
+      AddTime: 0,
+      ExpDam: 0,
+      Interval: 1000,
+    };
+    this.FreezeEffectiveness = { SlowMulti: 0.5, Time: 3, AddTime: 0 };
+    this.PoisonImmunity = 1;
+    this.FreezeImmunity = 1;
+    this.Poisoned = { IsPoisoned: false };
+    this.Frozen = { IsFrozen: false, SlowMulti: 1 };
+      
         this.isInGrid = false;
         this.removeFromGrid = () => { if (this.isInGrid) { grid.removeObject(this); this.isInGrid = false; } };
         this.addToGrid = () => { if (!this.isInGrid && this.bond == null) { grid.addObject(this); this.isInGrid = true; } };
@@ -1823,6 +1842,28 @@ class Entity {
         if (set.ALPHA != null) { 
             this.alpha = set.ALPHA;
         }
+        if (set.INVISIBLE != null) this.invisible = [
+			  	  set.INVISIBLE[0],
+			  	  set.INVISIBLE[1]
+		];
+    if (set.POISON != null) {
+      this.ContactPoison = set.POISON;
+    }
+    if (set.FREEZE != null) {
+      this.ContactFreeze = set.FREEZE;
+    }
+    if (set.POISONEFFECTIVENESS != null) {
+      this.PoisonEffectiveness = set.POISONEFFECTIVENESS;
+    }
+    if (set.FREEZEEFFECTIVENESS != null) {
+      this.FreezeEffectiveness = set.FREEZEEFFECTIVENESS;
+    }
+    if (set.POISONIMMUNITY != null) {
+      this.PoisonImmunity = set.POISONIMMUNITY;
+    }
+    if (set.FREEZEIMMUNITY != null) {
+      this.FreezeImmunity = set.FREEZEIMMUNITY;
+    }
         if (set.INVISIBLE != null) { 
             this.invisible = set.INVISIBLE;
         }
@@ -2070,6 +2111,8 @@ class Entity {
                     (this.type === 'crasher') ? 1 :
                     0,
             color: this.color,
+            //tank_color: this.body.color,
+            // name: this.nameColor + this.name,
             name: this.name,
             score: this.skill.score,
             guns: this.guns.map(gun => gun.getLastShot()),
@@ -2129,6 +2172,38 @@ class Entity {
             this.maxSpeed = this.topSpeed;
             this.damp = 0.05;
             break;
+            
+        case "miniGrow":
+        this.SIZE += 0.5;
+        this.maxSpeed = this.topSpeed;
+        break;
+            
+        case "grow":
+            this.SIZE += 1;
+            this.maxSpeed = this.topSpeed;
+            break;
+
+      case "megaGrow":
+        this.SIZE += 1.5;
+        this.maxSpeed = this.topSpeed;
+        break;
+
+      case "gigaGrow":
+        this.SIZE += 2;
+        this.maxSpeed = this.topSpeed;
+        break;
+            
+        case "ultraGrow":
+        this.SIZE += 69;
+        this.maxSpeed = this.topSpeed;
+        break;
+
+      case "growandshrink":
+        this.SIZE += 1;
+        this.SIZE -= 0.5;
+        this.maxSpeed = this.topSpeed;
+        break;
+            
         case 'motor':
             this.maxSpeed = 0;            
             if (this.topSpeed) {
@@ -2582,6 +2657,7 @@ var http = require('http'),
                         width: rounder(gun.width),
                         aspect: rounder(gun.aspect),
                         angle: rounder(gun.angle),
+                        color: rounder(gun.color),
                     };
                 }),
                 turrets: e.turrets.map(function(t) { 

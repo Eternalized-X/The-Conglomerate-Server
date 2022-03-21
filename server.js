@@ -867,6 +867,27 @@ class io_spin extends IO {
     };
   }
 }
+class io_mediumspin extends IO {
+  constructor(b) {
+    super(b);
+    this.a = 0;
+  }
+
+  think(input) {
+    this.a += 0.037;
+    let offset = 0;
+    if (this.body.bond != null) {
+      offset = this.body.bound.angle;
+    }
+    return {
+      target: {
+        x: Math.cos(this.a + offset),
+        y: Math.sin(this.a + offset)
+      },
+      main: true
+    };
+  }
+}
 class io_fastspin extends IO {
   constructor(b) {
     super(b);
@@ -888,6 +909,48 @@ class io_fastspin extends IO {
     };
   }
 }
+class io_slowspin extends IO {
+  constructor(b) {
+    super(b);
+    this.a = 0;
+  }
+
+  think(input) {
+    this.a += 0.01;
+    let offset = 0;
+    if (this.body.bond != null) {
+      offset = this.body.bound.angle;
+    }
+    return {
+      target: {
+        x: Math.cos(this.a + offset),
+        y: Math.sin(this.a + offset)
+      },
+      main: true
+    };
+  }
+}
+class io_reverseslowspin extends IO {
+  constructor(b) {
+    super(b);
+    this.a = 0;
+  }
+
+  think(input) {
+    this.a -= 0.01;//Lets Add 'reversefastspin'
+    let offset = 0;//idk how to do stuff like that sry
+    if (this.body.bond != null) {
+      offset = this.body.bound.angle;
+    }
+    return {
+      target: {
+        x: Math.cos(this.a + offset),
+        y: Math.sin(this.a + offset)
+      },
+      main: true
+    };
+  }
+}
 class io_reversespin extends IO {
   constructor(b) {
     super(b);
@@ -906,6 +969,27 @@ class io_reversespin extends IO {
         y: Math.sin(this.a + offset),
       },
       main: true,
+    };
+  }
+}
+class io_reversefastspin extends IO {
+  constructor(b) {
+    super(b);
+    this.a = 0;
+  }
+
+  think(input) {
+    this.a -= 0.072;
+    let offset = 0;
+    if (this.body.bond != null) {
+      offset = this.body.bound.angle;
+    }
+    return {
+      target: {
+        x: Math.cos(this.a + offset),
+        y: Math.sin(this.a + offset)
+      },
+      main: true
     };
   }
 }
@@ -2653,6 +2737,15 @@ class Entity {
       case "autospin":
         this.facing += 0.02 / roomSpeed;
         break;
+      case "smokeringspin":
+        this.facing += 0.2 / roomSpeed;
+        break;
+      case "slowspin":
+        this.facing += 0.015 / roomSpeed;
+        break;
+      case "fastspin":
+        this.facing += 0.04 / roomSpeed;
+        break;
       case "turnWithSpeed":
         this.facing += ((this.velocity.length / 90) * Math.PI) / roomSpeed;
         break;
@@ -2779,7 +2872,11 @@ class Entity {
         (this.team !== -1 && room.isIn("bas1", loc)) ||
         (this.team !== -2 && room.isIn("bas2", loc)) ||
         (this.team !== -3 && room.isIn("bas3", loc)) ||
-        (this.team !== -4 && room.isIn("bas4", loc))
+        (this.team !== -4 && room.isIn("bas4", loc)) ||
+        (this.team !== -1 && room.isIn("bap1", loc)) ||
+        (this.team !== -2 && room.isIn("bap2", loc)) ||
+        (this.team !== -3 && room.isIn("bap3", loc)) ||
+        (this.team !== -4 && room.isIn("bap4", loc))
       ) {
         this.kill();
       }

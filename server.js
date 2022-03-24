@@ -2737,6 +2737,9 @@ class Entity {
       case "autospin":
         this.facing += 0.02 / roomSpeed;
         break;
+      case "autoreversespin":
+        this.facing -= 0.02 / roomSpeed;
+        break;
       case "smokeringspin":
         this.facing += 0.2 / roomSpeed;
         break;
@@ -2745,6 +2748,9 @@ class Entity {
         break;
       case "fastspin":
         this.facing += 0.04 / roomSpeed;
+        break;
+      case "fastreversespin":
+        this.facing -= 0.04 / roomSpeed;
         break;
       case "turnWithSpeed":
         this.facing += ((this.velocity.length / 90) * Math.PI) / roomSpeed;

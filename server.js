@@ -1029,7 +1029,25 @@ class io_fleeAtLowHealth extends IO {
     }
   }
 }
+class io_canZoom extends IO {
+    constructor(body) {
+        super(body);
+        this.distance = 200;
+    }
 
+    think(input) {
+        if (input.alt && input.target) {
+            if (this.body.cameraOverrideX === null) {
+                let direction = Math.atan2(input.target.y, input.target.x);
+                this.body.cameraOverrideX = this.body.x + this.distance * Math.cos(direction);
+                this.body.cameraOverrideY = this.body.y + this.distance * Math.sin(direction);
+            }
+        } else {
+            this.body.cameraOverrideX = null;
+            this.body.cameraOverrideY = null;
+        }
+    }
+}
 /***** ENTITIES *****/
 // Define skills
 const skcnv = {
@@ -2024,6 +2042,8 @@ class Entity {
     this.stepRemaining = 1;
     this.x = position.x;
     this.y = position.y;
+    this.cameraOverrideX = null;
+    this.cameraOverrideY = null;
     this.velocity = new Vector(0, 0);
     this.accel = new Vector(0, 0);
     this.damp = 0.05;
@@ -2097,12 +2117,15 @@ class Entity {
   }
 
   addController(newIO) {
+    let listenToPlayer;
+    if (this.controllers.length && this.controllers[0] instanceof io_listenToPlayer) listenToPlayer = this.controllers.shift();
     if (Array.isArray(newIO)) {
-      this.controllers = newIO.concat(this.controllers);
+        this.controllers = newIO.concat(this.controllers);
     } else {
-      this.controllers.unshift(newIO);
+        this.controllers.unshift(newIO); 
     }
-  }
+    if (listenToPlayer) this.controllers.unshift(listenToPlayer);
+}
 
   define(set) {
     if (set.PARENT != null) {
@@ -4491,8 +4514,8 @@ const sockets = (() => {
                 // I live!
                 else if (player.body.photo) {
                   // Update camera position and motion
-                  camera.x = player.body.photo.x;
-                  camera.y = player.body.photo.y;
+                  camera.x = player.body.cameraOverrideX === null ? player.body.photo.x : player.body.cameraOverrideX;
+                  camera.y = player.body.cameraOverrideY === null ? player.body.photo.y : player.body.cameraOverrideY;
                   camera.vx = player.body.photo.vx;
                   camera.vy = player.body.photo.vy;
                   // Get what we should be able to see

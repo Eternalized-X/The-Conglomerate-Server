@@ -1047,11 +1047,10 @@ const skcnv = {
 };
 const levelers = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  22,
-23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
-  42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-  61, 62, 63, 64, 65,
-  ];
+  22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  41, 43, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+  60, 61, 62, 63, 64, 65, 66
+ ];
 class Skill {
   constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) {
     // Just skill stuff.
@@ -1203,7 +1202,10 @@ class Skill {
         if (
           this.level == c.TIER_1 ||
           this.level == c.TIER_2 ||
-          this.level == c.TIER_3
+          this.level == c.TIER_3 ||
+          this.level == c.TIER_4 ||
+          this.level == c.TIER_5 ||
+          this.level == c.TIER_6
         ) {
           this.canUpgrade = true;
         }
@@ -2288,6 +2290,36 @@ class Entity {
           class: e,
           tier: 3,
           level: c.TIER_3,
+          index: e.index,
+        });
+      });
+    }
+    if (set.UPGRADES_TIER_4 != null) {
+      set.UPGRADES_TIER_4.forEach((e) => {
+        this.upgrades.push({
+          class: e,
+          tier: 4,
+          level: c.TIER_4,
+          index: e.index,
+        });
+      });
+    }
+    if (set.UPGRADES_TIER_5 != null) {
+      set.UPGRADES_TIER_5.forEach((e) => {
+        this.upgrades.push({
+          class: e,
+          tier: 5,
+          level: c.TIER_5,
+          index: e.index,
+        });
+      });
+    }
+    if (set.UPGRADES_TIER_6 != null) {
+      set.UPGRADES_TIER_5.forEach((e) => {
+        this.upgrades.push({
+          class: e,
+          tier: 6,
+          level: c.TIER_6,
           index: e.index,
         });
       });

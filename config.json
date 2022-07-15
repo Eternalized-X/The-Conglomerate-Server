@@ -20,7 +20,6 @@
   "HEIGHT": 4000,
   "MODE": "ffa",
   "TEAMS": 4,
-    
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
   "ROOM_SETUP": [
@@ -75,5 +74,6 @@
   "FOOD_AMOUNT": 0.4, 
   "SKILL_BOOST": 5,
   "BOTS": 5,
-  "GLASS_HEALTH_FACTOR": 2
+  "GLASS_HEALTH_FACTOR": 2,
+  "secondaryGameMode": "z"
 }

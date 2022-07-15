@@ -2,11 +2,6 @@
   "host": "0.0.0.0",
   "servesStatic": true,
   "port": 3000,
-  "tracking": {
-        "ip": true,
-        "fingerprint": true
-    },
-    "clientAddresses": ["elite.io", "www.elite.io"],
   "networkUpdateFactor": 24,
   "socketWarningLimit": 5,
   "networkFrontlog": 1,
@@ -19,7 +14,6 @@
   "WIDTH": 4000,
   "HEIGHT": 4000,
   "MODE": "ffa",
-  "TEAMS": 4,
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
   "ROOM_SETUP": [
@@ -74,6 +68,5 @@
   "FOOD_AMOUNT": 0.4, 
   "SKILL_BOOST": 5,
   "BOTS": 5,
-  "GLASS_HEALTH_FACTOR": 2,
-  "secondaryGameMode": "z"
+  "GLASS_HEALTH_FACTOR": 2
 }

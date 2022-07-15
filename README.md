@@ -1,3 +1,8 @@
+ /*"tracking": {
+        "ip": true,
+        "fingerprint": true
+    },
+    "clientAddresses": ["elite.io", "www.elite.io"],*/
  
 ## Quick Start Guide
 

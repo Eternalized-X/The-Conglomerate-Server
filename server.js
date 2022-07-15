@@ -7,7 +7,7 @@
 require("google-closure-library");
 goog.require("goog.structs.PriorityQueue");
 goog.require("goog.structs.QuadTree");
-const express = require("express");
+/*const express = require("express");
 const fingerprint = require("express-fingerprint");
 const expressWs = require("express-ws");
 const cors = require("cors");
@@ -30,7 +30,7 @@ server.get("/gamemodeData.json", function(request, response) {
         maxPlayers: c.maxPlayers,
         code: [c.MODE, c.MODE === "ffa" ? "f" : c.TEAMS, c.secondaryGameMode].join("-")
     }));
-});
+});*/
 // Import game settings.
 const c = require("./config.json");
 

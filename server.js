@@ -7,7 +7,30 @@
 require("google-closure-library");
 goog.require("goog.structs.PriorityQueue");
 goog.require("goog.structs.QuadTree");
-
+const express = require("express");
+const fingerprint = require("express-fingerprint");
+const expressWs = require("express-ws");
+const cors = require("cors");
+const fs = require("fs");
+const server = express();
+server.use(fingerprint());
+server.use(express.json());
+expressWs(server);
+server.use(cors());
+server.get("/", function(request, response) {
+    response.send(`<script>location.href = "https://${c.clientAddresses[0]}"</script>`);
+});
+server.get("/mockups.json", function(request, response) {
+    response.send(mockupJsonData);
+});
+server.get("/gamemodeData.json", function(request, response) {
+    response.send(JSON.stringify({
+        gameMode: c.gameModeName,
+        players: views.length,
+        maxPlayers: c.maxPlayers,
+        code: [c.MODE, c.MODE === "ffa" ? "f" : c.TEAMS, c.secondaryGameMode].join("-")
+    }));
+});
 // Import game settings.
 const c = require("./config.json");
 

@@ -3946,7 +3946,7 @@ const sockets = (() => {
                 if (
                   player.body.skill.level < c.SKILL_CHEAT_CAP ||
                   (socket.key === process.env.SECRET &&
-                    player.body.skill.level < 45)
+                    player.body.skill.level < 600)
                 ) {
                   player.body.skill.score += player.body.skill.levelScore;
                   player.body.skill.maintain();

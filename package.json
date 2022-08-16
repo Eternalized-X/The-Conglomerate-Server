@@ -8,7 +8,9 @@
   "dependencies": {
     "google-closure-library": "^20220601.0.0",
     "ws": "6.1.x",
-    "eris": "^0.17.1"
+    "eris": "^0.17.1",
+    "heroku": "^7.62.0",
+    "netlify": "^11.0.4"
   },
   "engines": {
     "node": "10.x"

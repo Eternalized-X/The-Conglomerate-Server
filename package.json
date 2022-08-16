@@ -15,7 +15,7 @@
     "git": "^0.1.5"
   },
   "engines": {
-    "node": "10.x"
+    "node": "16.x"
   },
   "license": "GPL-3.0"
 }

@@ -1,5 +1,5 @@
 {
-  "host": "localhost",
+  "host": "0.0.0.0",
   "servesStatic": true,
   "port": 3000,
   "networkUpdateFactor": 24,
@@ -10,14 +10,6 @@
   "gameSpeed": 1,
   "runSpeed": 1.5,
   "maxHeartbeatInterval": 300000,
-  "sqlinfo":{
-    "connectionLimit": 50,
-    "host": "DEFAULT",
-    "user": "root",
-    "password": "DEFAULT",
-    "database": "DEFAULT",
-    "debug": false
-  },
   "verbose": true,
   "WIDTH": 4000,
   "HEIGHT": 4000,

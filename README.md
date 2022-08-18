@@ -1,3 +1,12 @@
+ /*"sqlinfo":{
+    "connectionLimit": 50,
+    "host": "DEFAULT",
+    "user": "root",
+    "password": "DEFAULT",
+    "database": "DEFAULT",
+    "debug": false
+  },*/
+ 
  /*"tracking": {
         "ip": true,
         "fingerprint": true

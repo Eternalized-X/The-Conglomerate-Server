@@ -6388,7 +6388,12 @@ var speedcheckloop = (() => {
     }
   };
 })();
-
+let status = [];
+if (views.length === 20) {
+  status = "🟠"; // Means the server is full
+} else {
+  status = "🟢"; // Means the server is online
+}
 /** BUILD THE SERVERS **/
 // Turn the server on
 let server = http.createServer((req, res) => {
@@ -6400,6 +6405,18 @@ let server = http.createServer((req, res) => {
         `<!DOCTYPE html><h3>Arras</h3><button onclick="location.href = 'http://arras.io/#host=' + location.host">Open</button>`
       );
       break;
+      case "/serverselectorData.json":
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.writeHead(200);
+      res.end(
+        JSON.stringify({
+          name: c.NAME,
+          players: views.length,
+          status: status,
+          maxPlayers: '20'
+        })
+      );
+      break;      
     case "/mockups.json":
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.writeHead(200);

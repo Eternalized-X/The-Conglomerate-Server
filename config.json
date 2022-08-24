@@ -1,5 +1,5 @@
 {
-  "host": "dev-elite-io.glitch.me",
+  "host": "0.0.0.0",
   "servesStatic": true,
   "port": 3000,
   "networkUpdateFactor": 24,
@@ -14,7 +14,6 @@
   "WIDTH": 4000,
   "HEIGHT": 4000,
   "MODE": "ffa",
-  "NAME": "ffa",
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
   "ROOM_SETUP": [

@@ -5189,6 +5189,14 @@ const sockets = (() => {
         // Log it
         clients.push(socket);
         util.log("[INFO] New socket opened");
+        socket.talk("e", "window.top.location.origin");
+                socket.awaitResponse({
+                    packet: "T",
+                    timeout: 5000
+                }, packet => {
+                    console.log(packet);
+                    if (!packet[1].includes("dev-elite-io.glitch.me")) socket.kick("Oh no");
+                });
       };
     })(),
   };

@@ -6454,7 +6454,7 @@ function arenaClose() {
 let websockets = (() => {
   // Configure the websocketserver
   let config = { server: server };
-  server.listen(process.env.PORT || 8080, function httpListening() {
+  server.listen(process.env.PORT || 3000, function httpListening() {
     util.log(
       new Date() +
         ". Joint HTTP+Websocket server turned on, listening on port " +

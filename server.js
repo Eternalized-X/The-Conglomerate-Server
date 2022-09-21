@@ -6439,14 +6439,22 @@ if (views.length === 20) {
 /** BUILD THE SERVERS **/
 // Turn the server on
 let server = http.createServer((req, res) => {
-  let { pathname } = url.parse(req.url);
+  let { pathname } = url.parse(req.url)
   switch (pathname) {
-    case "/":
-      res.writeHead(200);
-      res.end(
-        `<!DOCTYPE html><h3>Arras</h3><button onclick="location.href = 'http://arras.io/#host=' + location.host">Open</button>`
-      );
-      break;
+    case '/':
+      res.writeHead(200)
+      res.end(`<!DOCTYPE html><h3>Arras</h3><button onclick="location.href = 'http://arras.io/#host=' + location.host">Open</button>`)
+    break
+    case '/mockups.json':
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.writeHead(200)
+      res.end(mockupJsonData)
+    break
+    default:
+      res.writeHead(404)
+      res.end()
+  }
+})
       /*case "/serverselectorData.json":
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.writeHead(200);

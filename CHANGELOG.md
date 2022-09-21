@@ -1,5 +1,18 @@
 # Breaking Changes
 
+## September 19th, 2022
+
+If you've created a private server with this template before September 19th, 2022, the health bars will be weird on entities without shields.
+
+Find the following in your server.js:
+```
+    return this.amount / this.max;
+```
+Replace it with
+```
+    return this.max > 0 ? this.amount / this.max : -1;
+```
+
 ## November 24th, 2020
 
 If you've created a private server with this template before November 24th, 2020, it will not show a class tree when you press T.

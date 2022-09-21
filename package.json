@@ -1,21 +1,19 @@
 {
-  "name": "Elite.io",
+  "name": "arras",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
     "start": "node server"
   },
   "dependencies": {
-    "google-closure-library": "20180506.0.0",
+    "google-closure-library": "^20220803.0.0",
     "ws": "6.1.x",
     "eris": "^0.17.1",
-    "heroku": "^7.62.0",
-    "@heroku-cli/plugin-pipelines": "^7.62.0",
-    "is-heroku": "^3.0.0",
-    "git": "^0.1.5"
+    "discord": "^0.8.2",
+    "discord.js": "^14.4.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": "10.x"
   },
-  "license": "MIT"
+  "license": "GPL-3.0"
 }

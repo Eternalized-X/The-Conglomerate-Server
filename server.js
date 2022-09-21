@@ -1944,7 +1944,7 @@ class HealthType {
   }
 
   display() {
-    return this.amount / this.max;
+    return this.max > 0 ? this.amount / this.max : -1;
   }
 
   getDamage(amount, capped = true) {
@@ -6459,16 +6459,7 @@ let server = http.createServer((req, res) => {
         })
       );
       break;*/      
-    case "/mockups.json":
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.writeHead(200);
-      res.end(mockupJsonData);
-      break;
-    default:
-      res.writeHead(404);
-      res.end();
-  }
-});
+    
 
 //Arena Closed.
 /*let close = false;

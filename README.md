@@ -1,4 +1,4 @@
- You Want to help us to code? link will be here!
+ You Want to help us to code? the link will be here!
  
  <https://glitch.com/edit/#!/elite-io>
  

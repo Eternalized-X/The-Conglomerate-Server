@@ -1,17 +1,12 @@
- /*"sqlinfo":{
-    "connectionLimit": 50,
-    "host": "DEFAULT",
-    "user": "root",
-    "password": "DEFAULT",
-    "database": "DEFAULT",
-    "debug": false
-  },*/
+ You Want to help us to code? link will be here!
  
- /*"tracking": {
-        "ip": true,
-        "fingerprint": true
-    },
-    "clientAddresses": ["elite.io", "www.elite.io"],*/
+ <https://glitch.com/edit/#!/elite-io>
+ 
+ And
+ 
+ <https://glitch.com/edit/#!/elite-io-official-template>
+ 
+ Thank You!
  
 ## Quick Start Guide
 

@@ -1,13 +1,3 @@
- You Want to help us to code? the link will be here!
- 
- <https://glitch.com/edit/#!/elite-io>
- 
- And
- 
- <https://glitch.com/edit/#!/elite-io-official-template>
- 
- Thank You!
- 
 ## Quick Start Guide
 
 1. Click the top right where it says **Remix to Edit :microphone:**
